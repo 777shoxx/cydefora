@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import "./styles.css";
 import logoUrl from "./cydefora-logo.jpg";
+import AuthButton from "./auth/AuthButton";
 
 const translations = {
   uz: {
@@ -43,6 +44,7 @@ const translations = {
     demoStats: "Demo statistika brauzeringizda lokal saqlanadi.",
     noBackend: "Backend ma'lumotlari hali mavjud emas — bu demo dashboard."
   },
+
   ru: {
     home: "Главная", password: "Проверка пароля", tools: "Инструменты",
     dashboard: "Dashboard", about: "О нас", start: "Начать",
@@ -76,6 +78,7 @@ const translations = {
     demoStats: "Демо-статистика хранится локально в браузере.",
     noBackend: "Данных backend пока нет — это демо-dashboard."
   },
+
   en: {
     home: "Home", password: "Password Checker", tools: "Tools",
     dashboard: "Dashboard", about: "About Us", start: "Get Started",
@@ -157,6 +160,7 @@ const PASSWORD_MESSAGES = {
     "Hacker: bugun ishlar juda oson ketmoqda 😂",
     "Parolingizni kuchaytirish vaqti keldi."
   ],
+
   medium: [
     "Yomon emas, lekin hacker hali taslim bo‘lgani yo‘q 😏",
     "Har holda yaxshi. Lekin yana biroz kuchaytirsa bo‘ladi.",
@@ -194,6 +198,7 @@ const PASSWORD_MESSAGES = {
     "Bu password uchun biroz ko‘proq vaqt kerak bo‘ladi.",
     "Hackerning rejasiga ozgina qarshilik bor 😄"
   ],
+
   strong: [
     "Voy dod, bu parolni ko‘rib hacker ham o‘ylanib qoladi 😂",
     "Hacker: aka, bunisini qayerdan oldingiz? 💀",
@@ -231,6 +236,7 @@ const PASSWORD_MESSAGES = {
     "Bu password bilan hackerga sabr kerak.",
     "Himoya darajasi sezilarli darajada yaxshilandi."
   ],
+
   veryStrong: [
     "VOY DOD 😭 Hacker buni ko‘rib kompyuterni o‘chiradi.",
     "Hacker: men bugun boshqa saytga kiraman 💀",
@@ -285,33 +291,63 @@ const SEQUENCE_PATTERNS = [
 function getRandomMessage(level, previousMessage) {
   const list = PASSWORD_MESSAGES[level] || PASSWORD_MESSAGES.medium;
   if (list.length === 1) return list[0];
+
   let message = list[Math.floor(Math.random() * list.length)];
   let guard = 0;
+
   while (message === previousMessage && guard < 20) {
     message = list[Math.floor(Math.random() * list.length)];
     guard++;
   }
+
   return message;
 }
 
 function hasSequence(password) {
   const p = password.toLowerCase();
-  return SEQUENCE_PATTERNS.some(pattern => p.includes(pattern) || p.includes([...pattern].reverse().join("")));
+
+  return SEQUENCE_PATTERNS.some(
+    pattern =>
+      p.includes(pattern) ||
+      p.includes([...pattern].reverse().join(""))
+  );
 }
 
 function hasKeyboardPattern(password) {
   const p = password.toLowerCase();
-  const patterns = ["qwerty","asdfgh","zxcvbn","йцукен","фывапр","ячсмить"];
-  return patterns.some(x => p.includes(x) || p.includes([...x].reverse().join("")));
+
+  const patterns = [
+    "qwerty",
+    "asdfgh",
+    "zxcvbn",
+    "йцукен",
+    "фывапр",
+    "ячсмить"
+  ];
+
+  return patterns.some(
+    x => p.includes(x) || p.includes([...x].reverse().join(""))
+  );
 }
 
 function scorePassword(password) {
   if (!password) {
     return {
-      score: 0, label: "—", level: null, length: false, number: false,
-      upper: false, lower: false, special: false, long: false,
-      veryLong: false, repeated: false, common: false, sequence: false,
-      keyboard: false, entropy: 0
+      score: 0,
+      label: "—",
+      level: null,
+      length: false,
+      number: false,
+      upper: false,
+      lower: false,
+      special: false,
+      long: false,
+      veryLong: false,
+      repeated: false,
+      common: false,
+      sequence: false,
+      keyboard: false,
+      entropy: 0
     };
   }
 
@@ -334,9 +370,11 @@ function scorePassword(password) {
     special ? 33 : 0
   ].reduce((a, b) => a + b, 0);
 
-  const entropy = pools > 0 ? Math.round(password.length * Math.log2(pools)) : 0;
+  const entropy =
+    pools > 0 ? Math.round(password.length * Math.log2(pools)) : 0;
 
   let points = 0;
+
   if (password.length >= 8) points += 1;
   if (password.length >= 10) points += 1;
   if (password.length >= 12) points += 1;
@@ -354,6 +392,7 @@ function scorePassword(password) {
   if (common) points -= 6;
 
   let score = 1;
+
   if (!common && password.length >= 8 && points >= 3) score = 2;
   if (!common && password.length >= 10 && points >= 6) score = 3;
   if (!common && password.length >= 14 && points >= 8 && entropy >= 60) score = 4;
@@ -398,89 +437,213 @@ function App() {
 
   useEffect(() => {
     try {
-      const saved = JSON.parse(localStorage.getItem("cydefora-stats") || "{}");
+      const saved = JSON.parse(
+        localStorage.getItem("cydefora-stats") || "{}"
+      );
+
       setChecks(saved.checks || 0);
       setStrongChecks(saved.strongChecks || 0);
     } catch {}
   }, []);
 
-  const liveResult = useMemo(() => scorePassword(password), [password]);
+  const liveResult = useMemo(
+    () => scorePassword(password),
+    [password]
+  );
 
   function runCheck() {
     if (!password) return;
+
     const result = scorePassword(password);
     const message = getRandomMessage(result.level, lastMessage);
-    setCheckedResult({ ...result, message });
+
+    setCheckedResult({
+      ...result,
+      message
+    });
+
     setLastMessage(message);
 
     const next = {
       checks: checks + 1,
-      strongChecks: strongChecks + (result.score >= 3 ? 1 : 0)
+      strongChecks:
+        strongChecks + (result.score >= 3 ? 1 : 0)
     };
+
     setChecks(next.checks);
     setStrongChecks(next.strongChecks);
-    localStorage.setItem("cydefora-stats", JSON.stringify(next));
+
+    localStorage.setItem(
+      "cydefora-stats",
+      JSON.stringify(next)
+    );
   }
 
   function navigate(target) {
     setPage(target);
     setMenu(false);
     setLangOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
   }
 
   function openTool(tool) {
-    if (tool.id === "password") navigate("password");
-    else setComing(tool);
+    if (tool.id === "password") {
+      navigate("password");
+    } else {
+      setComing(tool);
+    }
   }
 
   return (
     <div className={dark ? "app dark" : "app light"}>
+
       <header className="navbar">
-        <button className="brand" onClick={() => navigate("home")} aria-label="Cydefora home">
-          <span className="logoFrame"><img src={logoUrl} alt="Cydefora logo" /></span>
+
+        <button
+          className="brand"
+          onClick={() => navigate("home")}
+          aria-label="Cydefora home"
+        >
+          <span className="logoFrame">
+            <img src={logoUrl} alt="Cydefora logo" />
+          </span>
+
           <span>CYDEFORA</span>
         </button>
 
         <nav className="desktopNav">
-          <button className={page === "home" ? "active" : ""} onClick={() => navigate("home")}>{t.home}</button>
-          <button className={page === "password" ? "active" : ""} onClick={() => navigate("password")}>{t.password}</button>
-          <button className={page === "tools" ? "active" : ""} onClick={() => navigate("tools")}>{t.tools}</button>
-          <button className={page === "dashboard" ? "active" : ""} onClick={() => navigate("dashboard")}>{t.dashboard}</button>
-          <button className={page === "about" ? "active" : ""} onClick={() => navigate("about")}>{t.about}</button>
+
+          <button
+            className={page === "home" ? "active" : ""}
+            onClick={() => navigate("home")}
+          >
+            {t.home}
+          </button>
+
+          <button
+            className={page === "password" ? "active" : ""}
+            onClick={() => navigate("password")}
+          >
+            {t.password}
+          </button>
+
+          <button
+            className={page === "tools" ? "active" : ""}
+            onClick={() => navigate("tools")}
+          >
+            {t.tools}
+          </button>
+
+          <button
+            className={page === "dashboard" ? "active" : ""}
+            onClick={() => navigate("dashboard")}
+          >
+            {t.dashboard}
+          </button>
+
+          <button
+            className={page === "about" ? "active" : ""}
+            onClick={() => navigate("about")}
+          >
+            {t.about}
+          </button>
+
         </nav>
 
         <div className="navActions">
+
           <div className="langWrap">
-            <button className="langBtn" onClick={() => setLangOpen(!langOpen)}>
-              {lang.toUpperCase()} <ChevronDown size={15}/>
+
+            <button
+              className="langBtn"
+              onClick={() => setLangOpen(!langOpen)}
+            >
+              {lang.toUpperCase()}
+              <ChevronDown size={15}/>
             </button>
+
             {langOpen && (
               <div className="langMenu">
-                {["uz","ru","en"].map(x => (
-                  <button key={x} className={lang === x ? "selected" : ""} onClick={() => {setLang(x);setLangOpen(false)}}>{x.toUpperCase()}</button>
+
+                {["uz", "ru", "en"].map(x => (
+
+                  <button
+                    key={x}
+                    className={lang === x ? "selected" : ""}
+                    onClick={() => {
+                      setLang(x);
+                      setLangOpen(false);
+                    }}
+                  >
+                    {x.toUpperCase()}
+                  </button>
+
                 ))}
+
               </div>
             )}
+
           </div>
-          <button className="themeBtn" onClick={() => setDark(!dark)} aria-label="Toggle theme">
+
+          <AuthButton />
+
+          <button
+            className="themeBtn"
+            onClick={() => setDark(!dark)}
+            aria-label="Toggle theme"
+          >
             {dark ? <Sun size={19}/> : <Moon size={19}/>}
           </button>
-          <button className="mobileMenu" onClick={() => setMenu(!menu)}>{menu ? <X/> : <Menu/>}</button>
+
+          <button
+            className="mobileMenu"
+            onClick={() => setMenu(!menu)}
+          >
+            {menu ? <X/> : <Menu/>}
+          </button>
+
         </div>
       </header>
 
       {menu && (
         <div className="mobileNav">
-          <button onClick={() => navigate("home")}>{t.home}</button>
-          <button onClick={() => navigate("password")}>{t.password}</button>
-          <button onClick={() => navigate("tools")}>{t.tools}</button>
-          <button onClick={() => navigate("dashboard")}>{t.dashboard}</button>
-          <button onClick={() => navigate("about")}>{t.about}</button>
+
+          <button onClick={() => navigate("home")}>
+            {t.home}
+          </button>
+
+          <button onClick={() => navigate("password")}>
+            {t.password}
+          </button>
+
+          <button onClick={() => navigate("tools")}>
+            {t.tools}
+          </button>
+
+          <button onClick={() => navigate("dashboard")}>
+            {t.dashboard}
+          </button>
+
+          <button onClick={() => navigate("about")}>
+            {t.about}
+          </button>
+
         </div>
       )}
 
-      {page === "home" && <Home t={t} lang={lang} onStart={() => navigate("password")} onTool={openTool} />}
+      {page === "home" && (
+        <Home
+          t={t}
+          lang={lang}
+          onStart={() => navigate("password")}
+          onTool={openTool}
+        />
+      )}
+
       {page === "password" && (
         <PasswordPage
           t={t}
@@ -493,212 +656,909 @@ function App() {
           runCheck={runCheck}
         />
       )}
-      {page === "tools" && <ToolsPage t={t} onTool={openTool} />}
-      {page === "dashboard" && <Dashboard t={t} checks={checks} strongChecks={strongChecks} />}
-      {page === "about" && <AboutPage t={t} />}
+
+      {page === "tools" && (
+        <ToolsPage
+          t={t}
+          lang={lang}
+          onTool={openTool}
+        />
+      )}
+
+      {page === "dashboard" && (
+        <Dashboard
+          t={t}
+          checks={checks}
+          strongChecks={strongChecks}
+        />
+      )}
+
+      {page === "about" && (
+        <AboutPage t={t}/>
+      )}
 
       <footer>
+
         <div className="footerTop">
+
           <div>
-            <div className="footerBrand"><span className="logoFrame small"><img src={logoUrl} alt="" /></span> CYDEFORA</div>
-            <p className="footerDemo">{t.demo}</p>
-          </div>
-          <div className="contactBox">
-            <strong>{t.contact}</strong>
-            <span>{t.contactText}</span>
-            <div className="socials">
-              <a href="https://t.me/cydefora" target="_blank" rel="noreferrer"><Send size={16}/> @cydefora</a>
-              <a href="https://instagram.com/cydefora" target="_blank" rel="noreferrer"><Instagram size={16}/> @cydefora</a>
+
+            <div className="footerBrand">
+              <span className="logoFrame small">
+                <img src={logoUrl} alt="" />
+              </span>
+
+              CYDEFORA
             </div>
+
+            <p className="footerDemo">
+              {t.demo}
+            </p>
+
           </div>
+
+          <div className="contactBox">
+
+            <strong>{t.contact}</strong>
+
+            <span>{t.contactText}</span>
+
+            <div className="socials">
+
+              <a
+                href="https://t.me/cydefora"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Send size={16}/>
+                @cydefora
+              </a>
+
+              <a
+                href="https://instagram.com/cydefora"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Instagram size={16}/>
+                @cydefora
+              </a>
+
+            </div>
+
+          </div>
+
         </div>
-        <div className="demoBar">{t.demo}</div>
+
+        <div className="demoBar">
+          {t.demo}
+        </div>
+
       </footer>
 
-      {coming && <ComingModal t={t} tool={coming} close={() => setComing(null)} />}
+      {coming && (
+        <ComingModal
+          t={t}
+          tool={coming}
+          close={() => setComing(null)}
+        />
+      )}
+
     </div>
   );
 }
 
 function Home({ t, lang, onStart, onTool }) {
+
   return (
     <main>
+
       <section className="hero">
+
         <div className="heroCopy">
-          <div className="eyebrow"><ShieldCheck size={16}/> CYBERSECURITY PLATFORM</div>
-          <h1>{t.hero1}<br/><span>{t.hero2}</span><br/>{t.hero3}</h1>
-          <p>{t.heroDesc}</p>
+
+          <div className="eyebrow">
+            <ShieldCheck size={16}/>
+            CYBERSECURITY PLATFORM
+          </div>
+
+          <h1>
+            {t.hero1}
+            <br/>
+            <span>{t.hero2}</span>
+            <br/>
+            {t.hero3}
+          </h1>
+
+          <p>
+            {t.heroDesc}
+          </p>
+
           <div className="heroButtons">
-            <button className="primary" onClick={onStart}>{t.start} <ArrowRight size={18}/></button>
-            <button className="secondary" onClick={() => document.getElementById("why").scrollIntoView({behavior:"smooth"})}>{t.learn}</button>
+
+            <button
+              className="primary"
+              onClick={onStart}
+            >
+              {t.start}
+              <ArrowRight size={18}/>
+            </button>
+
+            <button
+              className="secondary"
+              onClick={() =>
+                document
+                  .getElementById("why")
+                  .scrollIntoView({behavior:"smooth"})
+              }
+            >
+              {t.learn}
+            </button>
+
           </div>
+
           <div className="trust">
-            <span><Shield size={16}/> {t.safeTools}</span>
-            <span><CheckCircle2 size={16}/> 100% browser-based</span>
-            <span><Zap size={16}/> Free demo</span>
+
+            <span>
+              <Shield size={16}/>
+              {t.safeTools}
+            </span>
+
+            <span>
+              <CheckCircle2 size={16}/>
+              100% browser-based
+            </span>
+
+            <span>
+              <Zap size={16}/>
+              Free demo
+            </span>
+
           </div>
+
         </div>
+
         <div className="heroVisual">
-          <div className="orb orb1"></div><div className="orb orb2"></div>
-          <div className="heroLogo"><img src={logoUrl} alt="Cydefora" /></div>
-          <div className="codeFloat">SECURE // LEARN // PROTECT</div>
+
+          <div className="orb orb1"></div>
+          <div className="orb orb2"></div>
+
+          <div className="heroLogo">
+            <img src={logoUrl} alt="Cydefora" />
+          </div>
+
+          <div className="codeFloat">
+            SECURE // LEARN // PROTECT
+          </div>
+
         </div>
+
       </section>
 
       <section id="why" className="section">
-        <div className="sectionTitle"><span>{t.why}</span> <b>Cydefora?</b></div>
-        <div className="cards">
-          <Feature icon={ShieldCheck} title={t.safeTools} desc={t.safeDesc}/>
-          <Feature icon={GraduationCap} title={t.easy} desc={t.easyDesc}/>
-          <Feature icon={Target} title={t.practical} desc={t.practicalDesc}/>
-          <Feature icon={Zap} title={t.fast} desc={t.fastDesc}/>
+
+        <div className="sectionTitle">
+          <span>{t.why}</span>
+          <b>Cydefora?</b>
         </div>
+
+        <div className="cards">
+
+          <Feature
+            icon={ShieldCheck}
+            title={t.safeTools}
+            desc={t.safeDesc}
+          />
+
+          <Feature
+            icon={GraduationCap}
+            title={t.easy}
+            desc={t.easyDesc}
+          />
+
+          <Feature
+            icon={Target}
+            title={t.practical}
+            desc={t.practicalDesc}
+          />
+
+          <Feature
+            icon={Zap}
+            title={t.fast}
+            desc={t.fastDesc}
+          />
+
+        </div>
+
       </section>
 
       <section className="checkerPreview">
+
         <div>
-          <span className="badge">FREE TOOL</span>
-          <h2>{t.checkerTitle}</h2>
-          <p>{t.checkerDesc}</p>
-          <button className="primary" onClick={onStart}>{t.checkNow} <ArrowRight size={18}/></button>
+
+          <span className="badge">
+            FREE TOOL
+          </span>
+
+          <h2>
+            {t.checkerTitle}
+          </h2>
+
+          <p>
+            {t.checkerDesc}
+          </p>
+
+          <button
+            className="primary"
+            onClick={onStart}
+          >
+            {t.checkNow}
+            <ArrowRight size={18}/>
+          </button>
+
         </div>
+
         <MiniChecker t={t}/>
+
       </section>
 
       <section className="section toolsSection">
-        <div className="sectionTitle"><span>{t.tools}</span></div>
-        <div className="toolGrid">
-          {tools.map(tool => <ToolCard key={tool.id} tool={tool} t={t} lang={lang} onClick={() => onTool(tool)}/>)}
+
+        <div className="sectionTitle">
+          <span>{t.tools}</span>
         </div>
+
+        <div className="toolGrid">
+
+          {tools.map(tool => (
+            <ToolCard
+              key={tool.id}
+              tool={tool}
+              t={t}
+              lang={lang}
+              onClick={() => onTool(tool)}
+            />
+          ))}
+
+        </div>
+
       </section>
+
     </main>
   );
 }
 
-function Feature({icon:Icon,title,desc}) {
-  return <article className="featureCard"><div className="iconCircle"><Icon size={21}/></div><h3>{title}</h3><p>{desc}</p></article>
+function Feature({icon: Icon, title, desc}) {
+
+  return (
+    <article className="featureCard">
+
+      <div className="iconCircle">
+        <Icon size={21}/>
+      </div>
+
+      <h3>{title}</h3>
+
+      <p>{desc}</p>
+
+    </article>
+  );
 }
 
-function ToolCard({tool,t,onClick,lang}) {
+function ToolCard({tool, t, onClick, lang}) {
+
   const Icon = tool.icon;
+
   const currentLang = lang || "uz";
-  const title = tool.id === "password" ? t.password : tool.label[currentLang];
-  return <button className={"toolCard " + (tool.active ? "activeTool" : "")} onClick={onClick}>
-    <div className="toolIcon"><Icon size={23}/></div>
-    <div><h3>{title}</h3><p>{tool.active ? t.availableLabel : t.coming}</p></div>
-    <ArrowRight size={18} className="toolArrow"/>
-  </button>
+
+  const title =
+    tool.id === "password"
+      ? t.password
+      : tool.label[currentLang];
+
+  return (
+    <button
+      className={
+        "toolCard " +
+        (tool.active ? "activeTool" : "")
+      }
+      onClick={onClick}
+    >
+
+      <div className="toolIcon">
+        <Icon size={23}/>
+      </div>
+
+      <div>
+
+        <h3>{title}</h3>
+
+        <p>
+          {tool.active
+            ? t.availableLabel
+            : t.coming}
+        </p>
+
+      </div>
+
+      <ArrowRight
+        size={18}
+        className="toolArrow"
+      />
+
+    </button>
+  );
 }
 
 function MiniChecker({t}) {
-  const [p,setP] = useState("Cydefora2026!");
-  const [show,setShow] = useState(false);
+
+  const [p, setP] = useState("Cydefora2026!");
+  const [show, setShow] = useState(false);
+
   const r = scorePassword(p);
-  return <div className="miniChecker">
-    <label>{t.enterPassword}</label>
-    <div className="inputWrap"><input type={show?"text":"password"} value={p} onChange={e=>setP(e.target.value)}/><button onClick={()=>setShow(!show)} aria-label={show?t.hide:t.show}>{show?<EyeOff size={18}/>:<Eye size={18}/>}</button></div>
-    <div className="strengthLabel"><span>{t.strength}</span><b className={"s"+r.score}>{r.score ? t[["","weak","medium","strong","veryStrong"][r.score]] : "—"}</b></div>
-    <div className="strengthBar"><i style={{width: `${r.score*25}%`}}></i></div>
-    <div className="checksGrid"><span className={r.length?"ok":""}><CheckCircle2/> {t.chars}</span><span className={r.number?"ok":""}><CheckCircle2/> {t.number}</span><span className={r.upper?"ok":""}><CheckCircle2/> {t.upper}</span><span className={r.special?"ok":""}><CheckCircle2/> {t.special}</span></div>
-  </div>
+
+  return (
+    <div className="miniChecker">
+
+      <label>
+        {t.enterPassword}
+      </label>
+
+      <div className="inputWrap">
+
+        <input
+          type={show ? "text" : "password"}
+          value={p}
+          onChange={e => setP(e.target.value)}
+        />
+
+        <button
+          onClick={() => setShow(!show)}
+          aria-label={show ? t.hide : t.show}
+        >
+          {show
+            ? <EyeOff size={18}/>
+            : <Eye size={18}/>}
+        </button>
+
+      </div>
+
+      <div className="strengthLabel">
+
+        <span>{t.strength}</span>
+
+        <b className={"s" + r.score}>
+          {r.score
+            ? t[
+                ["","weak","medium","strong","veryStrong"]
+                [r.score]
+              ]
+            : "—"}
+        </b>
+
+      </div>
+
+      <div className="strengthBar">
+        <i
+          style={{
+            width: `${r.score * 25}%`
+          }}
+        ></i>
+      </div>
+
+      <div className="checksGrid">
+
+        <span className={r.length ? "ok" : ""}>
+          <CheckCircle2/>
+          {t.chars}
+        </span>
+
+        <span className={r.number ? "ok" : ""}>
+          <CheckCircle2/>
+          {t.number}
+        </span>
+
+        <span className={r.upper ? "ok" : ""}>
+          <CheckCircle2/>
+          {t.upper}
+        </span>
+
+        <span className={r.special ? "ok" : ""}>
+          <CheckCircle2/>
+          {t.special}
+        </span>
+
+      </div>
+
+    </div>
+  );
 }
 
-function PasswordPage({t,password,setPassword,showPassword,setShowPassword,liveResult,checkedResult,runCheck}) {
-  return <main className="page">
-    <div className="pageHead"><span className="eyebrow"><LockKeyhole size={16}/> PASSWORD CHECKER</span><h1>{t.checkerTitle}</h1><p>{t.checkerDesc}</p></div>
-    <div className="passwordLayout">
-      <section className="passwordBox">
-        <label>{t.enterPassword}</label>
-        <div className="bigInput"><input autoFocus type={showPassword?"text":"password"} value={password} onChange={e=>setPassword(e.target.value)} placeholder="••••••••••••"/><button onClick={()=>setShowPassword(!showPassword)} aria-label={showPassword?t.hide:t.show}>{showPassword?<EyeOff/>:<Eye/>}</button></div>
+function PasswordPage({
+  t,
+  password,
+  setPassword,
+  showPassword,
+  setShowPassword,
+  liveResult,
+  checkedResult,
+  runCheck
+}) {
 
-        {password && (
-          <div className="resultBox">
-            <div className="strengthLabel"><span>{t.strength}</span><b className={"s"+liveResult.score}>{liveResult.score ? t[["","weak","medium","strong","veryStrong"][liveResult.score]] : "—"}</b></div>
-            <div className="strengthBar"><i style={{width:`${liveResult.score*25}%`}}></i></div>
-            <div className="checksGrid">
-              <span className={liveResult.length?"ok":""}><CheckCircle2/> {t.chars}</span>
-              <span className={liveResult.number?"ok":""}><CheckCircle2/> {t.number}</span>
-              <span className={liveResult.upper?"ok":""}><CheckCircle2/> {t.upper}</span>
-              <span className={liveResult.special?"ok":""}><CheckCircle2/> {t.special}</span>
+  return (
+    <main className="page">
+
+      <div className="pageHead">
+
+        <span className="eyebrow">
+          <LockKeyhole size={16}/>
+          PASSWORD CHECKER
+        </span>
+
+        <h1>
+          {t.checkerTitle}
+        </h1>
+
+        <p>
+          {t.checkerDesc}
+        </p>
+
+      </div>
+
+      <div className="passwordLayout">
+
+        <section className="passwordBox">
+
+          <label>
+            {t.enterPassword}
+          </label>
+
+          <div className="bigInput">
+
+            <input
+              autoFocus
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="••••••••••••"
+            />
+
+            <button
+              onClick={() =>
+                setShowPassword(!showPassword)
+              }
+              aria-label={
+                showPassword ? t.hide : t.show
+              }
+            >
+              {showPassword
+                ? <EyeOff/>
+                : <Eye/>}
+            </button>
+
+          </div>
+
+          {password && (
+
+            <div className="resultBox">
+
+              <div className="strengthLabel">
+
+                <span>{t.strength}</span>
+
+                <b
+                  className={
+                    "s" + liveResult.score
+                  }
+                >
+                  {liveResult.score
+                    ? t[
+                        [
+                          "",
+                          "weak",
+                          "medium",
+                          "strong",
+                          "veryStrong"
+                        ][liveResult.score]
+                      ]
+                    : "—"}
+                </b>
+
+              </div>
+
+              <div className="strengthBar">
+                <i
+                  style={{
+                    width:
+                      `${liveResult.score * 25}%`
+                  }}
+                ></i>
+              </div>
+
+              <div className="checksGrid">
+
+                <span
+                  className={
+                    liveResult.length ? "ok" : ""
+                  }
+                >
+                  <CheckCircle2/>
+                  {t.chars}
+                </span>
+
+                <span
+                  className={
+                    liveResult.number ? "ok" : ""
+                  }
+                >
+                  <CheckCircle2/>
+                  {t.number}
+                </span>
+
+                <span
+                  className={
+                    liveResult.upper ? "ok" : ""
+                  }
+                >
+                  <CheckCircle2/>
+                  {t.upper}
+                </span>
+
+                <span
+                  className={
+                    liveResult.special ? "ok" : ""
+                  }
+                >
+                  <CheckCircle2/>
+                  {t.special}
+                </span>
+
+              </div>
+
             </div>
+
+          )}
+
+          {checkedResult?.message && (
+
+            <div
+              className={
+                `cyberMessage ${checkedResult.level}`
+              }
+            >
+
+              <div className="messageMark">
+                CY
+              </div>
+
+              <p>
+                {checkedResult.message}
+              </p>
+
+            </div>
+
+          )}
+
+          <button
+            className="primary full"
+            onClick={runCheck}
+          >
+            {t.checkNow}
+            <ArrowRight size={18}/>
+          </button>
+
+          <small className="privacy">
+            <ShieldCheck size={15}/>
+            {t.privacy}
+          </small>
+
+        </section>
+
+        <aside className="tips">
+
+          <h3>
+            {t.securityTips}
+          </h3>
+
+          <p>
+            {t.tip1}
+          </p>
+
+          <div className="tip">
+            <CheckCircle2/>
+            {t.tip2}
           </div>
-        )}
 
-        {checkedResult?.message && (
-          <div className={`cyberMessage ${checkedResult.level}`}>
-            <div className="messageMark">CY</div>
-            <p>{checkedResult.message}</p>
+          <div className="tip">
+            <CheckCircle2/>
+            {t.tip3}
           </div>
-        )}
 
-        <button className="primary full" onClick={runCheck}>{t.checkNow} <ArrowRight size={18}/></button>
-        <small className="privacy"><ShieldCheck size={15}/> {t.privacy}</small>
-      </section>
+        </aside>
 
-      <aside className="tips">
-        <h3>{t.securityTips}</h3>
-        <p>{t.tip1}</p>
-        <div className="tip"><CheckCircle2/> {t.tip2}</div>
-        <div className="tip"><CheckCircle2/> {t.tip3}</div>
-      </aside>
-    </div>
-  </main>
+      </div>
+
+    </main>
+  );
 }
 
-function ToolsPage({t,onTool}) {
-  return <main className="page">
-    <div className="pageHead"><span className="eyebrow"><Zap size={16}/> CYDEFORA TOOLS</span><h1>{t.tools}</h1><p>Cybersecurity utilities in one place.</p></div>
-    <div className="toolGrid big">{tools.map(tool=><ToolCard key={tool.id} tool={tool} t={t} lang={lang} onClick={()=>onTool(tool)}/>)}</div>
-  </main>
+function ToolsPage({t, onTool, lang}) {
+
+  return (
+    <main className="page">
+
+      <div className="pageHead">
+
+        <span className="eyebrow">
+          <Zap size={16}/>
+          CYDEFORA TOOLS
+        </span>
+
+        <h1>{t.tools}</h1>
+
+        <p>
+          Cybersecurity utilities in one place.
+        </p>
+
+      </div>
+
+      <div className="toolGrid big">
+
+        {tools.map(tool => (
+
+          <ToolCard
+            key={tool.id}
+            tool={tool}
+            t={t}
+            lang={lang}
+            onClick={() => onTool(tool)}
+          />
+
+        ))}
+
+      </div>
+
+    </main>
+  );
 }
 
-function Dashboard({t,checks,strongChecks}) {
-  return <main className="page">
-    <div className="pageHead"><span className="eyebrow"><LayoutDashboard size={16}/> DASHBOARD</span><h1>{t.dashboardTitle}</h1><p>{t.demoStats}</p></div>
-    <div className="stats">
-      <Stat icon={LockKeyhole} title={t.checks} value={checks}/>
-      <Stat icon={ShieldCheck} title={t.strongPasswords} value={strongChecks}/>
-      <Stat icon={Zap} title={t.available} value="1 / 5"/>
-      <Stat icon={Bot} title="Coming Soon" value="4"/>
-    </div>
-    <div className="dashboardPanel"><h2>{t.recent}</h2><div className="empty"><AlertTriangle size={28}/><p>{t.noBackend}</p></div></div>
-  </main>
+function Dashboard({t, checks, strongChecks}) {
+
+  return (
+    <main className="page">
+
+      <div className="pageHead">
+
+        <span className="eyebrow">
+          <LayoutDashboard size={16}/>
+          DASHBOARD
+        </span>
+
+        <h1>
+          {t.dashboardTitle}
+        </h1>
+
+        <p>
+          {t.demoStats}
+        </p>
+
+      </div>
+
+      <div className="stats">
+
+        <Stat
+          icon={LockKeyhole}
+          title={t.checks}
+          value={checks}
+        />
+
+        <Stat
+          icon={ShieldCheck}
+          title={t.strongPasswords}
+          value={strongChecks}
+        />
+
+        <Stat
+          icon={Zap}
+          title={t.available}
+          value="1 / 5"
+        />
+
+        <Stat
+          icon={Bot}
+          title="Coming Soon"
+          value="4"
+        />
+
+      </div>
+
+      <div className="dashboardPanel">
+
+        <h2>{t.recent}</h2>
+
+        <div className="empty">
+
+          <AlertTriangle size={28}/>
+
+          <p>
+            {t.noBackend}
+          </p>
+
+        </div>
+
+      </div>
+
+    </main>
+  );
 }
 
 function AboutPage({t}) {
-  return <main className="page aboutPage">
-    <div className="pageHead"><span className="eyebrow"><Info size={16}/> CYDEFORA</span><h1>{t.aboutTitle}</h1><p>{t.aboutText}</p></div>
-    <div className="aboutGrid">
-      <section className="aboutCard">
-        <div className="iconCircle"><Target size={22}/></div>
-        <h2>{t.aboutMission}</h2>
-        <p>{t.aboutMissionText}</p>
-      </section>
-      <section className="aboutCard">
-        <div className="iconCircle"><ShieldCheck size={22}/></div>
-        <h2>{t.safeTools}</h2>
-        <p>{t.safeDesc}</p>
-      </section>
-      <section className="aboutCard">
-        <div className="iconCircle"><Users size={22}/></div>
-        <h2>{t.contact}</h2>
-        <p>{t.contactText}</p>
-        <div className="aboutSocials">
-          <a href="https://t.me/cydefora" target="_blank" rel="noreferrer"><Send size={18}/> Telegram — @cydefora <ExternalLink size={14}/></a>
-          <a href="https://instagram.com/cydefora" target="_blank" rel="noreferrer"><Instagram size={18}/> Instagram — @cydefora <ExternalLink size={14}/></a>
-        </div>
-      </section>
+
+  return (
+    <main className="page aboutPage">
+
+      <div className="pageHead">
+
+        <span className="eyebrow">
+          <Info size={16}/>
+          CYDEFORA
+        </span>
+
+        <h1>
+          {t.aboutTitle}
+        </h1>
+
+        <p>
+          {t.aboutText}
+        </p>
+
+      </div>
+
+      <div className="aboutGrid">
+
+        <section className="aboutCard">
+
+          <div className="iconCircle">
+            <Target size={22}/>
+          </div>
+
+          <h2>
+            {t.aboutMission}
+          </h2>
+
+          <p>
+            {t.aboutMissionText}
+          </p>
+
+        </section>
+
+        <section className="aboutCard">
+
+          <div className="iconCircle">
+            <ShieldCheck size={22}/>
+          </div>
+
+          <h2>
+            {t.safeTools}
+          </h2>
+
+          <p>
+            {t.safeDesc}
+          </p>
+
+        </section>
+
+        <section className="aboutCard">
+
+          <div className="iconCircle">
+            <Users size={22}/>
+          </div>
+
+          <h2>
+            {t.contact}
+          </h2>
+
+          <p>
+            {t.contactText}
+          </p>
+
+          <div className="aboutSocials">
+
+            <a
+              href="https://t.me/cydefora"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Send size={18}/>
+              Telegram — @cydefora
+              <ExternalLink size={14}/>
+            </a>
+
+            <a
+              href="https://instagram.com/cydefora"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Instagram size={18}/>
+              Instagram — @cydefora
+              <ExternalLink size={14}/>
+            </a>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+  );
+}
+
+function Stat({icon: Icon, title, value}) {
+
+  return (
+    <div className="stat">
+
+      <div className="toolIcon">
+        <Icon size={21}/>
+      </div>
+
+      <span>{title}</span>
+
+      <strong>{value}</strong>
+
     </div>
-  </main>
+  );
 }
 
-function Stat({icon:Icon,title,value}) {
-  return <div className="stat"><div className="toolIcon"><Icon size={21}/></div><span>{title}</span><strong>{value}</strong></div>
+function ComingModal({t, tool, close}) {
+
+  const title =
+    tool.label
+      ? tool.label.uz
+      : "About Cydefora";
+
+  return (
+    <div
+      className="modalBackdrop"
+      onClick={close}
+    >
+
+      <div
+        className="modal"
+        onClick={e => e.stopPropagation()}
+      >
+
+        <div className="modalIcon">
+          <Bot size={30}/>
+        </div>
+
+        <h2>
+          {t.comingTitle}
+        </h2>
+
+        <h3>
+          {title}
+        </h3>
+
+        <p>
+          {t.comingDesc}
+        </p>
+
+        <button
+          className="primary full"
+          onClick={close}
+        >
+          OK
+        </button>
+
+      </div>
+
+    </div>
+  );
 }
 
-function ComingModal({t,tool,close}) {
-  const title = tool.label ? tool.label.uz : "About Cydefora";
-  return <div className="modalBackdrop" onClick={close}><div className="modal" onClick={e=>e.stopPropagation()}><div className="modalIcon"><Bot size={30}/></div><h2>{t.comingTitle}</h2><h3>{title}</h3><p>{t.comingDesc}</p><button className="primary full" onClick={close}>OK</button></div></div>
-}
-
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(
+  document.getElementById("root")
+).render(
+  <App />
+);

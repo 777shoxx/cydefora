@@ -1,0 +1,708 @@
+/* =========================================
+   CYDEFORA — FULL SCREEN SECURE ACCESS
+========================================= */
+
+.cyber-login-page {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(0, 255, 170, 0.09),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 10% 90%,
+      rgba(0, 255, 170, 0.04),
+      transparent 25%
+    ),
+    #030605;
+
+  color: #d9fff2;
+
+  font-family: "Courier New", monospace;
+}
+
+
+/* =========================================
+   BACKGROUND GRID
+========================================= */
+
+.cyber-grid {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(0, 255, 170, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(0, 255, 170, 0.035) 1px,
+      transparent 1px
+    );
+
+  background-size: 42px 42px;
+
+  pointer-events: none;
+}
+
+
+/* Scan line */
+
+.cyber-login-page::after {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  background: rgba(0, 255, 170, 0.12);
+
+  box-shadow:
+    0 0 15px rgba(0, 255, 170, 0.2);
+
+  animation: scanLine 7s linear infinite;
+
+  pointer-events: none;
+}
+
+@keyframes scanLine {
+  from {
+    top: -5%;
+  }
+
+  to {
+    top: 105%;
+  }
+}
+
+
+/* =========================================
+   LOGIN CARD
+========================================= */
+
+.cyber-login-card {
+  position: relative;
+  z-index: 2;
+
+  width: min(440px, calc(100vw - 36px));
+
+  max-height: calc(100vh - 40px);
+
+  overflow-y: auto;
+
+  padding: 34px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(8, 20, 16, 0.96),
+      rgba(3, 10, 8, 0.96)
+    );
+
+  border: 1px solid rgba(0, 255, 170, 0.28);
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 0 50px rgba(0, 255, 170, 0.08),
+    0 25px 80px rgba(0, 0, 0, 0.7),
+    inset 0 0 35px rgba(0, 255, 170, 0.025);
+
+  backdrop-filter: blur(20px);
+
+  animation: cardAppear 0.35s ease-out;
+}
+
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.cyber-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 20px;
+
+  color: #67d9b5;
+
+  font-size: 10px;
+
+  letter-spacing: 2px;
+}
+
+.cyber-status span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #00ff9d;
+
+  box-shadow:
+    0 0 8px #00ff9d,
+    0 0 18px rgba(0, 255, 157, 0.5);
+
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
+}
+
+
+/* =========================================
+   CYDEFORA TITLE
+========================================= */
+
+.cyber-header h1 {
+  margin: 0;
+
+  color: #edfff8;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 38px;
+
+  font-weight: 800;
+
+  letter-spacing: 7px;
+
+  text-shadow:
+    0 0 12px rgba(0, 255, 170, 0.35);
+}
+
+.cyber-subtitle {
+  margin: 8px 0 27px;
+
+  color: #00ff9d;
+
+  font-size: 10px;
+
+  letter-spacing: 3px;
+}
+
+
+/* =========================================
+   TERMINAL
+========================================= */
+
+.terminal-log {
+  margin-bottom: 25px;
+
+  padding: 13px 15px;
+
+  border-left: 2px solid #00ff9d;
+
+  background: rgba(0, 255, 170, 0.025);
+
+  color: #6d988a;
+
+  font-size: 10px;
+
+  line-height: 1.8;
+}
+
+.terminal-log p {
+  margin: 0;
+}
+
+
+/* =========================================
+   LABEL
+========================================= */
+
+.cyber-login-card label {
+  display: block;
+
+  margin: 17px 0 8px;
+
+  color: #71cdb2;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.cyber-input {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  height: 52px;
+
+  box-sizing: border-box;
+
+  padding: 0 13px;
+
+  gap: 11px;
+
+  background: rgba(0, 0, 0, 0.38);
+
+  border: 1px solid rgba(0, 255, 170, 0.18);
+
+  border-radius: 9px;
+
+  transition: 0.25s ease;
+}
+
+.cyber-input:focus-within {
+  border-color: rgba(0, 255, 170, 0.65);
+
+  box-shadow:
+    0 0 0 3px rgba(0, 255, 170, 0.045),
+    0 0 20px rgba(0, 255, 170, 0.08);
+}
+
+.cyber-input > span {
+  flex-shrink: 0;
+
+  color: #00ff9d;
+
+  font-size: 13px;
+}
+
+.cyber-input input {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 100%;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #eafff7;
+
+  font-family: "Courier New", monospace;
+
+  font-size: 14px;
+}
+
+.cyber-input input::placeholder {
+  color: #42645a;
+}
+
+
+/* =========================================
+   SHOW PASSWORD
+========================================= */
+
+.password-toggle {
+  flex-shrink: 0;
+
+  width: 35px;
+  height: 35px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  background: transparent;
+
+  color: #00ff9d;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  border-radius: 6px;
+
+  transition: 0.2s ease;
+}
+
+.password-toggle:hover {
+  background: rgba(0, 255, 170, 0.06);
+
+  text-shadow:
+    0 0 10px #00ff9d;
+
+  transform: scale(1.08);
+}
+
+
+/* =========================================
+   LOGIN BUTTON
+========================================= */
+
+.cyber-login-button {
+  width: 100%;
+  height: 52px;
+
+  margin-top: 24px;
+
+  border: 1px solid rgba(0, 255, 170, 0.55);
+
+  border-radius: 9px;
+
+  background: rgba(0, 255, 170, 0.07);
+
+  color: #00ff9d;
+
+  font-family: "Courier New", monospace;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.cyber-login-button:hover {
+  background: rgba(0, 255, 170, 0.14);
+
+  box-shadow:
+    0 0 25px rgba(0, 255, 170, 0.15);
+
+  transform: translateY(-1px);
+}
+
+.cyber-login-button:disabled {
+  opacity: 0.5;
+
+  cursor: wait;
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.cyber-message {
+  margin-top: 12px;
+
+  color: #ff6969;
+
+  font-size: 10px;
+
+  text-align: center;
+
+  letter-spacing: 1px;
+}
+
+.cyber-message.success {
+  color: #00ff9d;
+
+  text-shadow:
+    0 0 10px rgba(0, 255, 170, 0.5);
+}
+
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.cyber-divider {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin: 23px 0;
+
+  color: #35564c;
+
+  font-size: 9px;
+
+  letter-spacing: 2px;
+}
+
+.cyber-divider::before,
+.cyber-divider::after {
+  content: "";
+
+  flex: 1;
+
+  height: 1px;
+
+  background: rgba(0, 255, 170, 0.1);
+}
+
+
+/* =========================================
+   GOOGLE
+========================================= */
+
+.cyber-google {
+  width: 100%;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  border-radius: 9px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: #d7e5df;
+
+  font-family: "Courier New", monospace;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+.cyber-google span {
+  font-family: Arial, sans-serif;
+
+  font-size: 17px;
+
+  font-weight: 700;
+}
+
+.cyber-google:hover {
+  background: rgba(255, 255, 255, 0.07);
+
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+
+/* =========================================
+   CREATE ACCOUNT
+========================================= */
+
+.cyber-create {
+  width: 100%;
+
+  margin-top: 13px;
+
+  padding: 9px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #5c9e8a;
+
+  font-family: "Courier New", monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 1.5px;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.cyber-create:hover {
+  color: #00ff9d;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.cyber-footer {
+  display: flex;
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-top: 22px;
+
+  color: #315147;
+
+  font-size: 7px;
+
+  letter-spacing: 1.5px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 700px) {
+  .cyber-login-card {
+    width: min(420px, calc(100vw - 28px));
+
+    padding: 28px 22px;
+  }
+}
+
+
+/* =========================================
+   PHONE — MAIN DESIGN
+========================================= */
+
+@media (max-width: 480px) {
+  .cyber-login-page {
+    align-items: center;
+
+    padding: 14px;
+
+    box-sizing: border-box;
+  }
+
+  .cyber-login-card {
+    width: 100%;
+
+    max-height: calc(100vh - 28px);
+
+    padding: 25px 19px;
+
+    border-radius: 15px;
+  }
+
+  .cyber-header h1 {
+    font-size: 30px;
+
+    letter-spacing: 5px;
+  }
+
+  .cyber-subtitle {
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 22px;
+  }
+
+  .terminal-log {
+    padding: 11px 12px;
+
+    font-size: 8px;
+
+    margin-bottom: 20px;
+  }
+
+  .cyber-login-card label {
+    font-size: 9px;
+
+    margin-top: 14px;
+  }
+
+  .cyber-input {
+    height: 50px;
+  }
+
+  .cyber-input input {
+    font-size: 13px;
+  }
+
+  .cyber-login-button {
+    height: 50px;
+
+    font-size: 8px;
+
+    letter-spacing: 1px;
+  }
+
+  .cyber-google {
+    height: 47px;
+
+    font-size: 8px;
+  }
+
+  .cyber-footer {
+    font-size: 6px;
+  }
+}
+
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-height: 650px) {
+  .cyber-login-card {
+    padding-top: 19px;
+    padding-bottom: 19px;
+  }
+
+  .cyber-status {
+    margin-bottom: 12px;
+  }
+
+  .cyber-header h1 {
+    font-size: 27px;
+  }
+
+  .terminal-log {
+    margin-bottom: 13px;
+  }
+
+  .cyber-login-card label {
+    margin-top: 10px;
+  }
+
+  .cyber-login-button {
+    margin-top: 16px;
+  }
+
+  .cyber-divider {
+    margin: 16px 0;
+  }
+
+  .cyber-footer {
+    margin-top: 14px;
+  }
+}
