@@ -190,6 +190,74 @@ img{
   display:none;
 }
 
+.navAuth{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.navAuth .loginBtn,
+.navAuth .registerBtn,
+.navAuth .logoutBtn{
+  height:40px;
+  padding:0 16px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:.2s ease;
+}
+
+.navAuth .loginBtn{
+  background:transparent;
+  border:1px solid var(--border);
+  color:inherit;
+}
+
+.navAuth .loginBtn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+.navAuth .registerBtn{
+  border:1px solid transparent;
+  background:linear-gradient(100deg,var(--accent),var(--purple));
+  color:#fff;
+  box-shadow:0 8px 22px #ff513f30;
+}
+
+.navAuth .registerBtn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 10px 28px #ff513f45;
+}
+
+.navAuth .userPill{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  height:40px;
+  padding:0 14px;
+  border-radius:10px;
+  background:var(--card);
+  border:1px solid var(--border);
+  font-size:13px;
+  font-weight:700;
+  color:var(--accent);
+  white-space:nowrap;
+}
+
+.navAuth .logoutBtn{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+}
+
+.navAuth .logoutBtn:hover{
+  border-color:#ff4d4d;
+  color:#ff4d4d;
+}
+
 .langMenu{
   position:absolute;
   right:0;
@@ -1133,6 +1201,19 @@ footer{
     gap:5px;
   }
 
+  .navAuth{
+    gap:5px;
+  }
+
+  .navAuth .loginBtn,
+  .navAuth .registerBtn,
+  .navAuth .logoutBtn,
+  .navAuth .userPill{
+    height:36px;
+    padding:0 11px;
+    font-size:11px;
+  }
+
   .langBtn{
     height:36px;
     padding:0 9px;
@@ -1426,6 +1507,15 @@ footer{
   .mobileMenu{
     width:34px;
     height:34px;
+  }
+
+  .navAuth .loginBtn,
+  .navAuth .registerBtn,
+  .navAuth .logoutBtn,
+  .navAuth .userPill{
+    height:34px;
+    padding:0 9px;
+    font-size:10px;
   }
 
   .hero{

@@ -1,14 +1,19 @@
-import React, { useState } from "react";
-import { supabase } from "../../supabase";
-import { signInWithGoogle } from "../auth";
-import "./login.css";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabase";
+import { signInWithGoogle } from "../auth/auth";
+import { useAuth } from "../auth/AuthContext";
+import "./cyberAuth.css";
 
-export default function LoginPage({ onClose }) {
+export default function LoginPage() {
+  const navigate = useNavigate();
+  const { user, profile, loading, profileLoading } = useAuth();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
   const [language, setLanguage] = useState(
@@ -88,6 +93,16 @@ export default function LoginPage({ onClose }) {
 
   const t = translations[language];
 
+  useEffect(() => {
+    if (loading || profileLoading) return;
+
+    if (user && profile?.username) {
+      navigate("/", { replace: true });
+    } else if (user && !profile?.username) {
+      navigate("/complete-profile", { replace: true });
+    }
+  }, [loading, profileLoading, user, profile, navigate]);
+
   function changeLanguage(lang) {
     setLanguage(lang);
     localStorage.setItem("cydefora-language", lang);
@@ -101,7 +116,7 @@ export default function LoginPage({ onClose }) {
       return;
     }
 
-    setLoading(true);
+    setSubmitting(true);
     setMessage("");
 
     const cleanUsername = username.trim().toLowerCase();
@@ -116,7 +131,7 @@ export default function LoginPage({ onClose }) {
     if (rpcError || !data) {
       console.error("RPC error:", rpcError);
       setMessage(t.notFound);
-      setLoading(false);
+      setSubmitting(false);
       return;
     }
 
@@ -128,18 +143,16 @@ export default function LoginPage({ onClose }) {
     if (error) {
       console.error("Login error:", error);
       setMessage(t.denied);
-      setLoading(false);
+      setSubmitting(false);
       return;
     }
 
     setMessage(t.granted);
-    setLoading(false);
+    setSubmitting(false);
 
-    if (onClose) {
-      setTimeout(() => {
-        onClose();
-      }, 500);
-    }
+    setTimeout(() => {
+      navigate("/");
+    }, 500);
   }
 
   return (
@@ -147,7 +160,6 @@ export default function LoginPage({ onClose }) {
 
       <div className="cyber-grid"></div>
 
-      {/* LANGUAGE SELECTOR */}
       <div className="cyber-language">
         <button
           className={language === "uz" ? "active" : ""}
@@ -171,18 +183,16 @@ export default function LoginPage({ onClose }) {
         </button>
       </div>
 
-      {/* CLOSE */}
       <button
         className="cyber-close"
-        onClick={onClose}
-        aria-label="Close"
+        onClick={() => navigate("/")}
+        aria-label="Back to home"
       >
         ×
       </button>
 
       <div className="cyber-login-card">
 
-        {/* HEADER */}
         <div className="cyber-header">
 
           <div className="cyber-status">
@@ -198,14 +208,12 @@ export default function LoginPage({ onClose }) {
 
         </div>
 
-        {/* TERMINAL */}
         <div className="terminal-log">
           <p>{t.log1}</p>
           <p>{t.log2}</p>
           <p>{t.log3}</p>
         </div>
 
-        {/* LOGIN FORM */}
         <form onSubmit={handleLogin}>
 
           <label>{t.accessId}</label>
@@ -266,19 +274,17 @@ export default function LoginPage({ onClose }) {
           <button
             type="submit"
             className="cyber-login-button"
-            disabled={loading}
+            disabled={submitting}
           >
-            {loading ? t.verifying : t.login}
+            {submitting ? t.verifying : t.login}
           </button>
 
         </form>
 
-        {/* DIVIDER */}
         <div className="cyber-divider">
           <span>OR</span>
         </div>
 
-        {/* GOOGLE */}
         <button
           className="cyber-google"
           onClick={signInWithGoogle}
@@ -287,19 +293,13 @@ export default function LoginPage({ onClose }) {
           {t.google}
         </button>
 
-        {/* CREATE ACCOUNT */}
         <button
           className="cyber-create"
-          onClick={() => {
-            if (onClose) {
-              onClose();
-            }
-          }}
+          onClick={() => navigate("/register")}
         >
           {t.create}
         </button>
 
-        {/* FOOTER */}
         <div className="cyber-footer">
           <span>{t.encrypted}</span>
           <span>•</span>
