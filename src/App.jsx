@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 import ComingModal from "./components/ComingModal";
 import HomePage from "./pages/HomePage";
 import PasswordPage from "./pages/PasswordPage";
+import { LinkChecker } from "./pages/LinkChecker";
 import ToolsPage from "./pages/ToolsPage";
 import DashboardPage from "./pages/DashboardPage";
 import AboutPage from "./pages/AboutPage";
@@ -101,6 +102,8 @@ export default function App() {
   function openTool(tool) {
     if (tool.id === "password") {
       goTo("/password");
+    } else if (tool.id === "link") {
+      goTo("/link-checker");
     } else {
       setComing(tool);
     }
@@ -153,6 +156,11 @@ export default function App() {
               runCheck={runCheck}
             />
           }
+        />
+
+        <Route
+          path="/link-checker"
+          element={<LinkChecker t={t}/>}
         />
 
         <Route

@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   LockKeyhole, Eye, EyeOff, ArrowRight, CheckCircle2, ShieldCheck
 } from "lucide-react";
@@ -13,6 +14,7 @@ export default function PasswordPage({
   checkedResult,
   runCheck
 }) {
+  const navigate = useNavigate();
 
   return (
     <main className="page">
@@ -206,6 +208,18 @@ export default function PasswordPage({
         </aside>
 
       </div>
+
+      <section className="nextTool">
+        <div>
+          <span className="badge">LINK CHECKER</span>
+          <h2>{t.linkTitle}</h2>
+          <p>{t.linkDesc}</p>
+        </div>
+        <button className="secondary" onClick={() => navigate("/link-checker")}>
+          {t.checkLink}
+          <ArrowRight size={18}/>
+        </button>
+      </section>
 
     </main>
   );

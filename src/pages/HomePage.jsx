@@ -169,7 +169,7 @@ export default function HomePage({ t, lang, onStart, onTool }) {
           <span>{t.tools}</span>
         </div>
 
-        <div className="toolGrid">
+          <div className="toolGrid">
 
           {tools.map(tool => (
             <ToolCard

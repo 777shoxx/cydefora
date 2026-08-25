@@ -31,6 +31,7 @@ export const translations = {
     tip3: "Muhim parollarni qayta ishlatmang.",
     demoStats: "Demo statistika brauzeringizda lokal saqlanadi.",
     noBackend: "Backend ma'lumotlari hali mavjud emas — bu demo dashboard."
+    ,linkTitle: "Link Checker", linkDesc: "Veb-sahifani kiberxavfsizlik nuqtayi nazaridan tekshiring.", linkInput: "Tekshirmoqchi bo'lgan URL", checkLink: "Linkni tekshirish", linkLoading: "Tekshirilmoqda...", linkError: "Linkni tekshirishning iloji bo'lmadi.", linkPrivacy: "API kalitlari brauzerga yuborilmaydi.", linkHow: "Qanday ishlaydi?", linkHowDesc: "Sahifa mazmuni o'qiladi va xavfsizlik belgilari tahlil qilinadi.", linkTip1: "Sahifadagi shubhali ko'rsatmalar bajarilmaydi.", linkTip2: "Bu AI tahlili, yakuniy scan emas.", linkResult: "Tahlil natijasi", risk: "Risk", websiteType: "Veb-sayt turi", purpose: "Maqsad", summary: "Qisqa xulosa", sensitiveInfo: "Maxfiy ma'lumot indikatorlari", credentials: "Login ma'lumotlari", payment: "To'lov ma'lumotlari", personalInformation: "Shaxsiy ma'lumotlar", cryptocurrency: "Kriptovalyuta", detected: "Aniqlandi", notDetected: "Aniqlanmadi", warnings: "Ogohlantirishlar", confidence: "Ishonchlilik"
   },
 
   ru: {
@@ -65,6 +66,7 @@ export const translations = {
     tip3: "Не повторно используйте важные пароли.",
     demoStats: "Демо-статистика хранится локально в браузере.",
     noBackend: "Данных backend пока нет — это демо-dashboard."
+    ,linkTitle: "Проверка ссылки", linkDesc: "Проверьте веб-страницу на признаки киберугроз.", linkInput: "URL для проверки", checkLink: "Проверить ссылку", linkLoading: "Проверка...", linkError: "Не удалось проверить ссылку.", linkPrivacy: "API-ключи не отправляются в браузер.", linkHow: "Как это работает?", linkHowDesc: "Содержимое страницы анализируется на признаки угроз.", linkTip1: "Инструкции со страницы не выполняются.", linkTip2: "Это AI-анализ, а не полноценный scan.", linkResult: "Результат анализа", risk: "Риск", websiteType: "Тип сайта", purpose: "Назначение", summary: "Краткое описание", sensitiveInfo: "Индикаторы данных", credentials: "Учетные данные", payment: "Платежные данные", personalInformation: "Персональные данные", cryptocurrency: "Криптовалюта", detected: "Обнаружено", notDetected: "Не обнаружено", warnings: "Предупреждения", confidence: "Уверенность"
   },
 
   en: {
@@ -99,5 +101,6 @@ export const translations = {
     tip3: "Never reuse an important password.",
     demoStats: "Demo statistics are stored locally in your browser.",
     noBackend: "No backend data yet — this is a demo dashboard."
+    ,linkTitle: "Link Checker", linkDesc: "Check a webpage for cybersecurity signals.", linkInput: "URL to check", checkLink: "Check Link", linkLoading: "Checking...", linkError: "The link could not be checked.", linkPrivacy: "API keys are never sent to the browser.", linkHow: "How it works", linkHowDesc: "The page content is analyzed for security signals.", linkTip1: "Instructions found on the page are not followed.", linkTip2: "This is AI-assisted analysis, not a final scan.", linkResult: "Analysis result", risk: "Risk", websiteType: "Website type", purpose: "Purpose", summary: "Summary", sensitiveInfo: "Sensitive information indicators", credentials: "Credentials", payment: "Payment information", personalInformation: "Personal information", cryptocurrency: "Cryptocurrency", detected: "Detected", notDetected: "Not detected", warnings: "Warnings", confidence: "Confidence"
   }
 };
