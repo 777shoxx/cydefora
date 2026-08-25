@@ -835,6 +835,140 @@ img{
   min-width:16px;
 }
 
+.linkNotice{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0 0 18px;
+  padding:12px 14px;
+  border:1px solid #ef444455;
+  border-radius:10px;
+  color:#fca5a5;
+  font-size:13px;
+}
+
+.linkNotice svg,
+.linkWarnings svg{
+  flex:none;
+}
+
+.linkLayout .passwordBox form{
+  width:100%;
+}
+
+.primary:disabled{
+  opacity:.7;
+  cursor:wait;
+  transform:none;
+}
+
+.spin{
+  animation:linkSpin 1s linear infinite;
+}
+
+.linkResult{
+  margin-top:18px;
+  padding:30px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+}
+
+.linkResultHeader{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  border-bottom:1px solid var(--border);
+  padding-bottom:20px;
+}
+
+.linkResultHeader .eyebrow{
+  margin-bottom:8px;
+}
+
+.linkResultHeader h2{
+  margin:0;
+  font-size:24px;
+  overflow-wrap:anywhere;
+}
+
+.linkResultHeader strong{
+  text-transform:uppercase;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.linkFacts{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  padding:22px 0;
+}
+
+.linkFacts div{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  min-width:0;
+}
+
+.linkFacts span,
+.linkSummary > span,
+.linkIndicators > span{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.linkFacts b{
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
+
+.linkSummary,
+.linkIndicators{
+  border-top:1px solid var(--border);
+  padding-top:20px;
+}
+
+.linkSummary p{
+  line-height:1.7;
+  margin:9px 0 0;
+}
+
+.linkIndicators .checksGrid{
+  margin-top:14px;
+}
+
+.linkWarnings{
+  margin-top:22px;
+  padding:16px;
+  border:1px solid #f59e0b55;
+  border-radius:12px;
+  color:#fbbf24;
+}
+
+.linkWarnings > span{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+  font-size:13px;
+}
+
+.linkWarnings ul{
+  color:var(--muted);
+  line-height:1.6;
+  margin:10px 0 0;
+  padding-left:22px;
+}
+
+@keyframes linkSpin{
+  to{transform:rotate(360deg)}
+}
+
 /* =========================
    Dashboard / About
    ========================= */
@@ -1416,6 +1550,24 @@ footer{
 
   .tips{
     padding:18px 15px;
+  }
+
+  .linkResult{
+    padding:18px 14px;
+  }
+
+  .linkResultHeader{
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .linkResultHeader h2{
+    font-size:20px;
+  }
+
+  .linkFacts{
+    grid-template-columns:1fr;
+    gap:13px;
   }
 
   .stats{
