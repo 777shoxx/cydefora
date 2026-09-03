@@ -7,7 +7,8 @@ export async function checkLink(url, language = "uz") {
 
   const result = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(result.error || "The link could not be analyzed.");
+    const details = result.code ? ` (${result.code})` : "";
+    throw new Error(`${result.error || "The link could not be analyzed."}${details}`);
   }
 
   return result;
