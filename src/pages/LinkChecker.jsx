@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AlertTriangle,
   ArrowRight,
@@ -16,11 +16,34 @@ const riskColors = {
   unknown: "#a3a3aa",
 };
 
-export function LinkChecker({ t }) {
+export function LinkChecker({ t, lang }) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
+  const [lastCheckedUrl, setLastCheckedUrl] = useState("");
+
+  useEffect(() => {
+    if (!lastCheckedUrl || !result) return;
+
+    let cancelled = false;
+    setLoading(true);
+    setError("");
+    checkLink(lastCheckedUrl, lang)
+      .then((nextResult) => {
+        if (!cancelled) setResult(nextResult);
+      })
+      .catch((requestError) => {
+        if (!cancelled) setError(requestError.message || t.linkError);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [lang]);
 
   async function runCheck(event) {
     event.preventDefault();
@@ -28,8 +51,13 @@ export function LinkChecker({ t }) {
     setResult(null);
     setLoading(true);
 
+    const normalizedUrl = /^https?:\/\//i.test(url.trim())
+      ? url.trim()
+      : `https://${url.trim()}`;
+    setLastCheckedUrl(normalizedUrl);
+
     try {
-      setResult(await checkLink(url.trim()));
+      setResult(await checkLink(normalizedUrl, lang));
     } catch (requestError) {
       setError(requestError.message || t.linkError);
     } finally {
@@ -50,7 +78,7 @@ export function LinkChecker({ t }) {
       <div className="pageHead">
         <span className="eyebrow">
           <Link2 size={16} />
-          LINK CHECKER
+          {t.linkEyebrow}
         </span>
         <h1>{t.linkTitle}</h1>
         <p>{t.linkDesc}</p>
@@ -63,7 +91,7 @@ export function LinkChecker({ t }) {
             <div className="bigInput">
               <input
                 id="link-url"
-                type="url"
+                type="text"
                 value={url}
                 onChange={(event) => setUrl(event.target.value)}
                 placeholder="https://example.com"
@@ -113,14 +141,14 @@ export function LinkChecker({ t }) {
               <h2>{result.title || url}</h2>
             </div>
             <strong style={{ color: riskColors[result.risk] || riskColors.unknown }}>
-              {t.risk}: {result.risk}
+              {t.risk}: {t.riskValues?.[result.risk] || result.risk}
             </strong>
           </div>
 
           <div className="linkFacts">
             <div><span>{t.websiteType}</span><b>{result.websiteType || "—"}</b></div>
             <div><span>{t.purpose}</span><b>{result.purpose || "—"}</b></div>
-            <div><span>{t.confidence}</span><b>{result.confidence || "unknown"}</b></div>
+            <div><span>{t.confidence}</span><b>{t.confidenceValues?.[result.confidence] || result.confidence || "unknown"}</b></div>
           </div>
 
           <div className="linkSummary">

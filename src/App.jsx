@@ -160,7 +160,7 @@ export default function App() {
 
         <Route
           path="/link-checker"
-          element={<LinkChecker t={t}/>}
+          element={<LinkChecker t={t} lang={lang}/>} 
         />
 
         <Route

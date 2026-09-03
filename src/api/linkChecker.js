@@ -1,8 +1,8 @@
-export async function checkLink(url) {
+export async function checkLink(url, language = "uz") {
   const response = await fetch("/check-link", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ url }),
+    body: JSON.stringify({ url, language }),
   });
 
   const result = await response.json().catch(() => ({}));
