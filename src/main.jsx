@@ -13,4 +13,4 @@ createRoot(
       <App />
     </AuthProvider>
   </BrowserRouter>
-);
+); //git hub uchun
