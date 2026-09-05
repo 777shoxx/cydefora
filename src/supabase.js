@@ -43,4 +43,4 @@ function createDisabledAuthClient() {
 export const supabase =
   supabaseUrl && supabaseKey
     ? createClient(supabaseUrl, supabaseKey)
-    : createDisabledAuthClient()
+    : createDisabledAuthClient() //wdkjbhelakskh
