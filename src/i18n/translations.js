@@ -31,7 +31,7 @@ export const translations = {
     tip3: "Muhim parollarni qayta ishlatmang.",
     demoStats: "Demo statistika brauzeringizda lokal saqlanadi.",
     noBackend: "Backend ma'lumotlari hali mavjud emas — bu demo dashboard."
-    ,linkEyebrow: "HAVOLA TEKSHIRUVI", linkTitle: "Havola tekshiruvi", linkDesc: "Veb-sahifani kiberxavfsizlik nuqtayi nazaridan tekshiring.", linkInput: "Tekshirmoqchi bo'lgan URL", checkLink: "Havolani tekshirish", linkLoading: "Tekshirilmoqda...", linkError: "Havolani tekshirishning iloji bo'lmadi.", linkPrivacy: "API kalitlari brauzerga yuborilmaydi.", linkHow: "Qanday ishlaydi?", linkHowDesc: "Sahifa mazmuni o'qiladi va xavfsizlik belgilari tahlil qilinadi.", linkTip1: "Sahifadagi shubhali ko'rsatmalar bajarilmaydi.", linkTip2: "Bu AI tahlili, yakuniy scan emas.", linkResult: "Tahlil natijasi", risk: "Xavf", riskValues: { low: "past", medium: "o'rta", high: "yuqori", unknown: "noma'lum" }, websiteType: "Veb-sayt turi", purpose: "Maqsad", summary: "Qisqa xulosa", sensitiveInfo: "Maxfiy ma'lumot indikatorlari", credentials: "Login ma'lumotlari", payment: "To'lov ma'lumotlari", personalInformation: "Shaxsiy ma'lumotlar", cryptocurrency: "Kriptovalyuta", detected: "Aniqlandi", notDetected: "Aniqlanmadi", warnings: "Ogohlantirishlar", confidence: "Ishonchlilik", confidenceValues: { low: "past", medium: "o'rta", high: "yuqori", unknown: "noma'lum" }
+    ,linkEyebrow: "HAVOLA TEKSHIRUVI", linkTitle: "Havola tekshiruvi", linkDesc: "Veb-sahifani kiberxavfsizlik nuqtayi nazaridan tekshiring.", linkInput: "Tekshirmoqchi bo'lgan URL", checkLink: "Havolani tekshirish", linkLoading: "Tekshirilmoqda...", linkError: "Havolani tekshirishning iloji bo'lmadi.", linkPrivacy: "API kalitlari brauzerga yuborilmaydi.", linkHow: "Qanday ishlaydi?", linkHowDesc: "URL qismlari aniq qoidalar yordamida tahlil qilinadi.", linkTip1: "Sahifadagi shubhali ko'rsatmalar bajarilmaydi.", linkTip2: "Bu evristik tahlil, xavfsizlik kafolati emas.", linkResult: "Tahlil natijasi", risk: "Xavf", riskValues: { low: "past", medium: "o'rta", high: "yuqori", unknown: "noma'lum" }, websiteType: "Veb-sayt turi", purpose: "Maqsad", summary: "Qisqa xulosa", sensitiveInfo: "Maxfiy ma'lumot indikatorlari", credentials: "Login ma'lumotlari", payment: "To'lov ma'lumotlari", personalInformation: "Shaxsiy ma'lumotlar", cryptocurrency: "Kriptovalyuta", detected: "Aniqlandi", notDetected: "Aniqlanmadi", warnings: "Ogohlantirishlar", confidence: "Ishonchlilik", confidenceValues: { low: "past", medium: "o'rta", high: "yuqori", unknown: "noma'lum" }
   },
 
   ru: {
@@ -66,7 +66,7 @@ export const translations = {
     tip3: "Не повторно используйте важные пароли.",
     demoStats: "Демо-статистика хранится локально в браузере.",
     noBackend: "Данных backend пока нет — это демо-dashboard."
-    ,linkEyebrow: "ПРОВЕРКА ССЫЛКИ", linkTitle: "Проверка ссылки", linkDesc: "Проверьте веб-страницу на признаки киберугроз.", linkInput: "URL для проверки", checkLink: "Проверить ссылку", linkLoading: "Проверка...", linkError: "Не удалось проверить ссылку.", linkPrivacy: "API-ключи не отправляются в браузер.", linkHow: "Как это работает?", linkHowDesc: "Содержимое страницы анализируется на признаки угроз.", linkTip1: "Инструкции со страницы не выполняются.", linkTip2: "Это AI-анализ, а не полноценный scan.", linkResult: "Результат анализа", risk: "Риск", riskValues: { low: "низкий", medium: "средний", high: "высокий", unknown: "неизвестен" }, websiteType: "Тип сайта", purpose: "Назначение", summary: "Краткое описание", sensitiveInfo: "Индикаторы данных", credentials: "Учетные данные", payment: "Платежные данные", personalInformation: "Персональные данные", cryptocurrency: "Криптовалюта", detected: "Обнаружено", notDetected: "Не обнаружено", warnings: "Предупреждения", confidence: "Уверенность", confidenceValues: { low: "низкая", medium: "средняя", high: "высокая", unknown: "неизвестна" }
+    ,linkEyebrow: "ПРОВЕРКА ССЫЛКИ", linkTitle: "Проверка ссылки", linkDesc: "Проверьте структуру URL по детерминированным правилам.", linkInput: "URL для проверки", checkLink: "Проверить ссылку", linkLoading: "Проверка...", linkError: "Не удалось проверить ссылку.", linkPrivacy: "API-ключи не отправляются в браузер.", linkHow: "Как это работает?", linkHowDesc: "Компоненты URL проверяются детерминированными правилами.", linkTip1: "Инструкции со страницы не выполняются.", linkTip2: "Это эвристическая оценка, а не гарантия безопасности.", linkResult: "Результат анализа", risk: "Риск", riskValues: { low: "низкий", medium: "средний", high: "высокий", unknown: "неизвестен" }, websiteType: "Тип сайта", purpose: "Назначение", summary: "Краткое описание", sensitiveInfo: "Индикаторы данных", credentials: "Учетные данные", payment: "Платежные данные", personalInformation: "Персональные данные", cryptocurrency: "Криптовалюта", detected: "Обнаружено", notDetected: "Не обнаружено", warnings: "Предупреждения", confidence: "Уверенность", confidenceValues: { low: "низкая", medium: "средняя", high: "высокая", unknown: "неизвестна" }
   },
 
   en: {
@@ -101,6 +101,99 @@ export const translations = {
     tip3: "Never reuse an important password.",
     demoStats: "Demo statistics are stored locally in your browser.",
     noBackend: "No backend data yet — this is a demo dashboard."
-    ,linkEyebrow: "LINK CHECKER", linkTitle: "Link Checker", linkDesc: "Check a webpage for cybersecurity signals.", linkInput: "URL to check", checkLink: "Check Link", linkLoading: "Checking...", linkError: "The link could not be checked.", linkPrivacy: "API keys are never sent to the browser.", linkHow: "How it works", linkHowDesc: "The page content is analyzed for security signals.", linkTip1: "Instructions found on the page are not followed.", linkTip2: "This is AI-assisted analysis, not a final scan.", linkResult: "Analysis result", risk: "Risk", riskValues: { low: "low", medium: "medium", high: "high", unknown: "unknown" }, websiteType: "Website type", purpose: "Purpose", summary: "Summary", sensitiveInfo: "Sensitive information indicators", credentials: "Credentials", payment: "Payment information", personalInformation: "Personal information", cryptocurrency: "Cryptocurrency", detected: "Detected", notDetected: "Not detected", warnings: "Warnings", confidence: "Confidence", confidenceValues: { low: "low", medium: "medium", high: "high", unknown: "unknown" }
+    ,linkEyebrow: "LINK CHECKER", linkTitle: "Link Checker", linkDesc: "Check a webpage for cybersecurity signals.", linkInput: "URL to check", checkLink: "Check Link", linkLoading: "Checking...", linkError: "The link could not be checked.", linkPrivacy: "API keys are never sent to the browser.", linkHow: "How it works", linkHowDesc: "Deterministic rules inspect URL components for risk signals.", linkTip1: "Instructions found on the page are not followed.", linkTip2: "This heuristic score is not a probability or a guarantee of safety.", linkResult: "Analysis result", risk: "Risk", riskValues: { low: "low", medium: "medium", high: "high", unknown: "unknown" }, websiteType: "Website type", purpose: "Purpose", summary: "Summary", sensitiveInfo: "Sensitive information indicators", credentials: "Credentials", payment: "Payment information", personalInformation: "Personal information", cryptocurrency: "Cryptocurrency", detected: "Detected", notDetected: "Not detected", warnings: "Warnings", confidence: "Confidence", confidenceValues: { low: "low", medium: "medium", high: "high", unknown: "unknown" }
   }
 };
+
+Object.assign(translations.uz, {
+  linkDesc: "URL tuzilishi va xavfsizlik belgilarini qoidalar asosida tahlil qiling.",
+  linkPrivacy: "Tahlil URL manzilini ochmaydi yoki tarmoqqa yubormaydi.",
+  linkHowDesc: "Natija URL qismlarini tekshiradigan aniq qoidalar asosida hisoblanadi.",
+  linkTip1: "Havola ochilmaydi va undan ma'lumot olinmaydi.",
+  linkTip2: "Ball xavf ehtimoli emas; qoidaviy evristika xavfsizlikni isbotlamaydi.",
+  linkResult: "Tahlil natijasi", risk: "Xavf",
+  riskValues: { LOW: "past", MEDIUM: "o'rta", HIGH: "yuqori", CRITICAL: "juda yuqori" },
+  linkScore: "Xavf balli", linkThresholds: "Past: 0–19 · O'rta: 20–39 · Yuqori: 40–59 · Juda yuqori: 60–100",
+  linkScoreFormula: "Har bir guruhda eng kuchli belgi hisoblanadi; guruh hissasi cheklangan:",
+  linkFindings: "Aniqlangan belgilar", linkRecommendations: "Tavsiyalar",
+  severityValues: { low: "past", medium: "o‘rta", high: "yuqori" },
+  linkScoreGroups: { transport: "ulanish", structure: "tuzilma", host: "xost", authority: "hisob ma’lumotlari", obfuscation: "niqoblash", path: "yo‘l", combination: "birikma" },
+  ruleNames: {
+    TRANSPORT_HTTP: "HTTP ulanishi", URL_UNUSUALLY_LONG: "Juda uzun URL", HOST_DEEP_SUBDOMAINS: "Ko‘p qavatli subdomenlar",
+    HOST_IS_IP_ADDRESS: "IP manzil ishlatilgan", URL_EMBEDDED_CREDENTIALS: "URL ichida hisob ma’lumotlari",
+    TRANSPORT_UNUSUAL_PORT: "Noodatiy port", URL_EXCESSIVE_ENCODING: "Ortiqcha kodlash", HOST_PUNYCODE: "Punycode domen",
+    HOST_BRAND_LOOKALIKE: "Brendga o‘xshash domen", HOST_KNOWN_SHORTENER: "Qisqa havola xizmati",
+    PATH_SENSITIVE_TERMS: "Maxfiy amalga oid so‘zlar", PATH_SUSPICIOUS_COMBINATION: "Birgalikdagi xavf belgilari",
+    PATH_EXECUTABLE_DOWNLOAD: "Bajariluvchi fayl havolasi",
+  },
+  linkRequestErrors: {
+    LINK_NETWORK_ERROR: "Tahlil xizmatiga ulanib bo‘lmadi. Qayta urinib ko‘ring.",
+    LINK_UNEXPECTED_RESPONSE: "Tahlil xizmatidan kutilmagan javob keldi.", HTTP_400: "So‘rov noto‘g‘ri shakllangan.",
+    HTTP_413: "So‘rov hajmi juda katta.", HTTP_405: "Bu so‘rov usuli qo‘llab-quvvatlanmaydi.",
+  },
+  invalidInput: "Noto'g'ri URL", invalidRisk: "Noto'g'ri URL",
+  invalidExplanation: "URL tekshirish uchun yaroqsiz. Bu xavfli ekanini anglatmaydi.",
+  noFindings: "Sozlangan xavf belgilari topilmadi. Bu URL xavfsizligini kafolatlamaydi.",
+});
+
+Object.assign(translations.ru, {
+  linkDesc: "Проверьте структуру URL и признаки риска по детерминированным правилам.",
+  linkPrivacy: "URL не открывается и не отправляется во внешнюю сеть.",
+  linkHowDesc: "Результат рассчитывается по правилам, анализирующим компоненты URL.",
+  linkTip1: "Ссылка не открывается и ее содержимое не загружается.",
+  linkTip2: "Баллы не являются вероятностью; эвристики не доказывают безопасность.",
+  linkResult: "Результат анализа", risk: "Риск",
+  riskValues: { LOW: "низкий", MEDIUM: "средний", HIGH: "высокий", CRITICAL: "критический" },
+  linkScore: "Балл риска", linkThresholds: "Низкий: 0–19 · Средний: 20–39 · Высокий: 40–59 · Критический: 60–100",
+  linkScoreFormula: "В каждой группе учитывается самый сильный признак; вклад группы ограничен:",
+  linkFindings: "Обнаруженные признаки", linkRecommendations: "Рекомендации",
+  severityValues: { low: "низкая", medium: "средняя", high: "высокая" },
+  linkScoreGroups: { transport: "соединение", structure: "структура", host: "хост", authority: "учетные данные", obfuscation: "маскировка", path: "путь", combination: "сочетание" },
+  ruleNames: {
+    TRANSPORT_HTTP: "Соединение HTTP", URL_UNUSUALLY_LONG: "Очень длинный URL", HOST_DEEP_SUBDOMAINS: "Глубокая вложенность поддоменов",
+    HOST_IS_IP_ADDRESS: "Используется IP-адрес", URL_EMBEDDED_CREDENTIALS: "Данные пользователя в URL",
+    TRANSPORT_UNUSUAL_PORT: "Нестандартный порт", URL_EXCESSIVE_ENCODING: "Избыточное кодирование", HOST_PUNYCODE: "Домен Punycode",
+    HOST_BRAND_LOOKALIKE: "Домен имитирует бренд", HOST_KNOWN_SHORTENER: "Сервис коротких ссылок",
+    PATH_SENSITIVE_TERMS: "Слова о конфиденциальных действиях", PATH_SUSPICIOUS_COMBINATION: "Сочетание признаков риска",
+    PATH_EXECUTABLE_DOWNLOAD: "Ссылка на исполняемый файл",
+  },
+  linkRequestErrors: {
+    LINK_NETWORK_ERROR: "Не удалось подключиться к анализатору. Попробуйте еще раз.",
+    LINK_UNEXPECTED_RESPONSE: "Анализатор вернул неожиданный ответ.", HTTP_400: "Некорректный формат запроса.",
+    HTTP_413: "Размер запроса слишком велик.", HTTP_405: "Этот метод запроса не поддерживается.",
+  },
+  invalidInput: "Некорректный URL", invalidRisk: "Некорректный URL",
+  invalidExplanation: "URL не прошел проверку. Это не означает, что он вредоносный.",
+  noFindings: "Настроенные признаки риска не обнаружены. Это не гарантирует безопасность URL.",
+});
+
+Object.assign(translations.en, {
+  linkDesc: "Check URL structure for risk signals using deterministic rules.",
+  linkPrivacy: "The URL is not opened or fetched from the network.",
+  linkHowDesc: "A deterministic set of rules inspects URL components and explains each finding.",
+  linkTip1: "The link is never opened and its content is not fetched.",
+  linkTip2: "The score is not a probability; heuristics cannot prove safety.",
+  linkResult: "Analysis result", risk: "Risk",
+  riskValues: { LOW: "low", MEDIUM: "medium", HIGH: "high", CRITICAL: "critical" },
+  linkScore: "Risk score", linkThresholds: "Low: 0–19 · Medium: 20–39 · High: 40–59 · Critical: 60–100",
+  linkScoreFormula: "Only the strongest finding in each group contributes, up to its cap:",
+  linkFindings: "Detected indicators", linkRecommendations: "Recommendations",
+  severityValues: { low: "low", medium: "medium", high: "high" },
+  linkScoreGroups: { transport: "transport", structure: "structure", host: "host", authority: "authority", obfuscation: "obfuscation", path: "path", combination: "combination" },
+  ruleNames: {
+    TRANSPORT_HTTP: "HTTP transport", URL_UNUSUALLY_LONG: "Unusually long URL", HOST_DEEP_SUBDOMAINS: "Deep subdomain nesting",
+    HOST_IS_IP_ADDRESS: "IP address used", URL_EMBEDDED_CREDENTIALS: "Credentials in URL",
+    TRANSPORT_UNUSUAL_PORT: "Unusual port", URL_EXCESSIVE_ENCODING: "Excessive encoding", HOST_PUNYCODE: "Punycode domain",
+    HOST_BRAND_LOOKALIKE: "Brand lookalike domain", HOST_KNOWN_SHORTENER: "Known URL shortener",
+    PATH_SENSITIVE_TERMS: "Sensitive-action wording", PATH_SUSPICIOUS_COMBINATION: "Combined risk signals",
+    PATH_EXECUTABLE_DOWNLOAD: "Executable file link",
+  },
+  linkRequestErrors: {
+    LINK_NETWORK_ERROR: "Could not reach the analysis service. Please try again.",
+    LINK_UNEXPECTED_RESPONSE: "The analysis service returned an unexpected response.", HTTP_400: "The request was malformed.",
+    HTTP_413: "The request is too large.", HTTP_405: "This request method is not supported.",
+  },
+  invalidInput: "Invalid URL", invalidRisk: "Invalid URL",
+  invalidExplanation: "The URL did not pass validation. This does not mean it is malicious.",
+  noFindings: "No configured risk indicators were found. This does not guarantee the URL is safe.",
+});

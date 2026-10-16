@@ -897,7 +897,99 @@ img{
   margin-top:14px;
 }
 
-.linkWarnings{
+.linkScore{
+  padding:20px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.linkScoreHeading,
+.linkFindingHeading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.linkScoreHeading span{
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+}
+
+.linkScoreHeading strong{
+  font-size:18px;
+}
+
+.linkScoreTrack{
+  height:8px;
+  margin-top:12px;
+  overflow:hidden;
+  border-radius:99px;
+  background:var(--border);
+}
+
+.linkScoreTrack span{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:currentColor;
+}
+
+.risk-low .linkScoreTrack{color:#22c55e}
+.risk-medium .linkScoreTrack{color:#f59e0b}
+.risk-high .linkScoreTrack,
+.risk-critical .linkScoreTrack{color:#ef4444}
+.risk-invalid .linkScoreTrack{color:#a3a3aa}
+
+.linkScore small{
+  display:block;
+  margin-top:9px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+}
+
+.linkFindingList,
+.linkRecommendations ul{
+  display:grid;
+  gap:12px;
+  margin:14px 0 0;
+  padding:0;
+  list-style:none;
+}
+
+.linkFindingList li{
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:9px;
+}
+
+.linkFindingHeading b{
+  font-size:12px;
+}
+
+.severity{
+  flex:none;
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.severity-high,
+.severity-critical{color:#ef4444}
+.severity-medium{color:#f59e0b}
+.severity-low{color:#22c55e}
+
+.linkFindingList p,
+.linkEmptyFindings{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+
+.linkRecommendations{
   margin-top:22px;
   padding:16px;
   border:1px solid #f59e0b55;
@@ -905,7 +997,7 @@ img{
   color:#fbbf24;
 }
 
-.linkWarnings > span{
+.linkRecommendations > span{
   display:flex;
   align-items:center;
   gap:8px;
@@ -913,11 +1005,16 @@ img{
   font-size:13px;
 }
 
-.linkWarnings ul{
+.linkRecommendations ul{
   color:var(--muted);
   line-height:1.6;
-  margin:10px 0 0;
-  padding-left:22px;
+}
+
+.linkDisclaimer{
+  margin:18px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
 }
 
 @keyframes linkSpin{

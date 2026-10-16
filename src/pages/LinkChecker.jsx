@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowRight,
@@ -10,10 +10,11 @@ import {
 import { checkLink } from "../api/linkChecker";
 
 const riskColors = {
-  low: "#22c55e",
-  medium: "#f59e0b",
-  high: "#ef4444",
-  unknown: "#a3a3aa",
+  LOW: "#22c55e",
+  MEDIUM: "#f59e0b",
+  HIGH: "#ef4444",
+  CRITICAL: "#ef4444",
+  INVALID: "#a3a3aa",
 };
 
 export function LinkChecker({ t, lang }) {
@@ -21,57 +22,61 @@ export function LinkChecker({ t, lang }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
-  const [lastCheckedUrl, setLastCheckedUrl] = useState("");
+  const activeCheck = useRef(0);
+  const lastCheckedUrl = useRef(null);
+
+  function getRequestErrorMessage(requestError) {
+    const code = requestError.code;
+    return t.linkRequestErrors?.[code] ||
+      (code?.startsWith("HTTP_") ? t.linkError : requestError.message || t.linkError);
+  }
+
+  useEffect(() => () => { activeCheck.current += 1; }, []);
 
   useEffect(() => {
-    if (!lastCheckedUrl || !result) return;
-
-    let cancelled = false;
+    if (lastCheckedUrl.current === null) return undefined;
+    const checkId = ++activeCheck.current;
     setLoading(true);
     setError("");
-    checkLink(lastCheckedUrl, lang)
+    setResult(null);
+
+    checkLink(lastCheckedUrl.current, { language: lang })
       .then((nextResult) => {
-        if (!cancelled) setResult(nextResult);
+        if (activeCheck.current === checkId) setResult(nextResult);
       })
       .catch((requestError) => {
-        if (!cancelled) setError(requestError.message || t.linkError);
+        if (activeCheck.current === checkId) {
+          setError(getRequestErrorMessage(requestError));
+        }
       })
       .finally(() => {
-        if (!cancelled) setLoading(false);
+        if (activeCheck.current === checkId) setLoading(false);
       });
 
     return () => {
-      cancelled = true;
+      if (activeCheck.current === checkId) activeCheck.current += 1;
     };
   }, [lang]);
 
   async function runCheck(event) {
     event.preventDefault();
+    const checkId = ++activeCheck.current;
     setError("");
     setResult(null);
     setLoading(true);
-
-    const normalizedUrl = /^https?:\/\//i.test(url.trim())
-      ? url.trim()
-      : `https://${url.trim()}`;
-    setLastCheckedUrl(normalizedUrl);
+    lastCheckedUrl.current = url;
 
     try {
-      setResult(await checkLink(normalizedUrl, lang));
+      const nextResult = await checkLink(url, { language: lang });
+      if (activeCheck.current === checkId) setResult(nextResult);
     } catch (requestError) {
-      setError(requestError.message || t.linkError);
+      if (activeCheck.current === checkId) {
+        setError(getRequestErrorMessage(requestError));
+      }
     } finally {
-      setLoading(false);
+      if (activeCheck.current === checkId) setLoading(false);
     }
   }
-
-  const sensitiveInfo = result?.sensitiveInfo || {};
-  const indicators = [
-    ["credentials", t.credentials],
-    ["payment", t.payment],
-    ["personalInformation", t.personalInformation],
-    ["cryptocurrency", t.cryptocurrency],
-  ];
 
   return (
     <main className="page">
@@ -95,7 +100,8 @@ export function LinkChecker({ t, lang }) {
                 value={url}
                 onChange={(event) => setUrl(event.target.value)}
                 placeholder="https://example.com"
-                required
+                autoComplete="url"
+                aria-describedby="link-privacy"
                 disabled={loading}
               />
             </div>
@@ -113,7 +119,7 @@ export function LinkChecker({ t, lang }) {
             </button>
           </form>
 
-          <small className="privacy">
+          <small className="privacy" id="link-privacy">
             <ShieldCheck size={15} />
             {t.linkPrivacy}
           </small>
@@ -134,48 +140,74 @@ export function LinkChecker({ t, lang }) {
       </div>
 
       {result && (
-        <section className="linkResult" aria-live="polite">
+        <section className={`linkResult risk-${result.risk.toLowerCase()}`} aria-live="polite">
           <div className="linkResultHeader">
             <div>
               <span className="eyebrow">{t.linkResult}</span>
-              <h2>{result.title || url}</h2>
+              <h2>{result.normalizedUrl || url.trim() || t.invalidInput}</h2>
             </div>
-            <strong style={{ color: riskColors[result.risk] || riskColors.unknown }}>
-              {t.risk}: {t.riskValues?.[result.risk] || result.risk}
+            <strong style={{ color: riskColors[result.risk] || riskColors.INVALID }}>
+              {result.risk === "INVALID"
+                ? t.invalidRisk
+                : `${t.risk}: ${t.riskValues?.[result.risk] || result.risk}`}
             </strong>
           </div>
 
-          <div className="linkFacts">
-            <div><span>{t.websiteType}</span><b>{result.websiteType || "—"}</b></div>
-            <div><span>{t.purpose}</span><b>{result.purpose || "—"}</b></div>
-            <div><span>{t.confidence}</span><b>{t.confidenceValues?.[result.confidence] || result.confidence || "unknown"}</b></div>
-          </div>
-
-          <div className="linkSummary">
-            <span>{t.summary}</span>
-            <p>{result.summary || "—"}</p>
+          <div className="linkScore">
+            <div className="linkScoreHeading">
+              <span>{t.linkScore}</span>
+              <strong>{result.risk === "INVALID" ? "—" : `${result.score} / 100`}</strong>
+            </div>
+            <div
+              className="linkScoreTrack"
+              role="progressbar"
+              aria-label={t.linkScore}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow={result.score}
+            >
+              <span style={{ width: `${result.score}%` }} />
+            </div>
+            <small>{t.linkThresholds}</small>
+            <small>
+              {t.linkScoreFormula} {result.scoreBreakdown.map(({ group, contribution, cap }) =>
+                `${t.linkScoreGroups?.[group] || group} +${contribution}/${cap}`).join(" · ")}
+            </small>
           </div>
 
           <div className="linkIndicators">
-            <span>{t.sensitiveInfo}</span>
-            <div className="checksGrid">
-              {indicators.map(([key, label]) => (
-                <span className={sensitiveInfo[key] ? "ok" : ""} key={key}>
-                  <CheckCircle2 />
-                  {label}: {sensitiveInfo[key] ? t.detected : t.notDetected}
-                </span>
-              ))}
-            </div>
+            <span>{t.linkFindings}</span>
+            {result.findings.length ? (
+              <ul className="linkFindingList">
+                {result.findings.map((finding) => (
+                  <li key={finding.id}>
+                    <div className="linkFindingHeading">
+                      <b>{t.ruleNames?.[finding.id] || finding.id.replaceAll("_", " ")}</b>
+                      <span className={`severity severity-${finding.severity}`}>
+                        {t.severityValues?.[finding.severity] || finding.severity} · +{finding.weight}
+                      </span>
+                    </div>
+                    <p>{finding.explanation}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="linkEmptyFindings">
+                {result.risk === "INVALID" ? t.invalidExplanation : t.noFindings}
+              </p>
+            )}
           </div>
 
-          {result.warnings?.length > 0 && (
-            <div className="linkWarnings">
-              <span><AlertTriangle size={16} />{t.warnings}</span>
-              <ul>
-                {result.warnings.map((warning, index) => <li key={`${warning}-${index}`}>{warning}</li>)}
-              </ul>
-            </div>
-          )}
+          <div className="linkRecommendations">
+            <span><AlertTriangle size={16} />{t.linkRecommendations}</span>
+            <ul>
+              {result.recommendations.map((recommendation) => (
+                <li key={recommendation}>{recommendation}</li>
+              ))}
+            </ul>
+          </div>
+
+          <p className="linkDisclaimer">{result.disclaimer}</p>
         </section>
       )}
     </main>
