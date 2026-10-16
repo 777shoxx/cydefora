@@ -3,7 +3,7 @@ import test from "node:test";
 import { analyzeUrl, classifyRiskScore, URL_RISK_CONFIG } from "../api/url-risk-analyzer.mjs";
 import { handleLinkCheck } from "../api/check-link-handler.mjs";
 import vercelHandler from "../api/check-link.mjs";
-import netlifyHandler from "../netlify/functions/check-link.mjs";
+import netlifyHandler, { handler as netlifyEventHandler } from "../netlify/functions/check-link.mjs";
 
 const findingIds = (result) => result.findings.map((finding) => finding.id);
 
@@ -133,6 +133,26 @@ test("Netlify and Vercel adapters return the shared analyzer response", async ()
   }, vercelResponse);
   assert.equal(vercelResponse.statusCode, 200);
   assert.equal(JSON.parse(vercelResponse.body).risk, "LOW");
+});
+
+test("Netlify supports classic event invocations and base64 request bodies", async () => {
+  const body = Buffer.from(JSON.stringify({ url: "https://example.com/login", language: "ru" })).toString("base64");
+  const response = await netlifyEventHandler({
+    httpMethod: "POST",
+    headers: { "Content-Length": String(Buffer.from(body, "base64").length) },
+    body,
+    isBase64Encoded: true,
+  });
+
+  assert.equal(response.statusCode, 200);
+  assert.match(JSON.parse(response.body).findings[0].explanation, /В пути или параметрах/);
+
+  const defaultEventResponse = await netlifyHandler({
+    httpMethod: "POST",
+    headers: {},
+    body: JSON.stringify({ url: "https://example.com/" }),
+  });
+  assert.equal(defaultEventResponse.statusCode, 200);
 });
 
 test("analysis results are deterministic", () => {
