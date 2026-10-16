@@ -5,7 +5,6 @@ import {
   Send, Instagram, ExternalLink
 } from "lucide-react";
 import logoUrl from "../cydefora-logo.jpg";
-import AuthButton from "../auth/AuthButton";
 
 export function Layout({ children, t, lang, setLang, dark, setDark }) {
   const [menu, setMenu] = useState(false);
@@ -100,8 +99,6 @@ export function Layout({ children, t, lang, setLang, dark, setDark }) {
               </div>
             )}
           </div>
-
-          <AuthButton />
 
           <button
             className="themeBtn"

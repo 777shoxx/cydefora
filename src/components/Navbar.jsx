@@ -2,7 +2,6 @@ import React from "react";
 import { useLocation } from "react-router-dom";
 import { ChevronDown, Sun, Moon, Menu, X } from "lucide-react";
 import logoUrl from "../cydefora-logo.jpg";
-import AuthButton from "../auth/AuthButton";
 
 export default function Navbar({
   t,
@@ -108,8 +107,6 @@ export default function Navbar({
             )}
 
           </div>
-
-          <AuthButton />
 
           <button
             className="themeBtn"

@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { translations } from "./i18n/translations";
 import { scorePassword, getRandomMessage } from "./utils/passwordStrength";
-import { useAuth } from "./auth/AuthContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ComingModal from "./components/ComingModal";
@@ -12,16 +11,9 @@ import { LinkChecker } from "./pages/LinkChecker";
 import ToolsPage from "./pages/ToolsPage";
 import DashboardPage from "./pages/DashboardPage";
 import AboutPage from "./pages/AboutPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import CompleteProfilePage from "./pages/CompleteProfilePage";
-
-const AUTH_PATHS = ["/login", "/register", "/complete-profile"];
 
 export default function App() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user, profile, loading: authLoading, profileLoading } = useAuth();
 
   const [lang, setLang] = useState("uz");
   const [dark, setDark] = useState(true);
@@ -47,13 +39,6 @@ export default function App() {
       setStrongChecks(saved.strongChecks || 0);
     } catch {}
   }, []);
-
-  useEffect(() => {
-    if (authLoading || profileLoading) return;
-    if (user && !profile?.username && location.pathname !== "/complete-profile") {
-      navigate("/complete-profile", { replace: true });
-    }
-  }, [authLoading, profileLoading, user, profile, location.pathname, navigate]);
 
   const liveResult = useMemo(
     () => scorePassword(password),
@@ -109,25 +94,20 @@ export default function App() {
     }
   }
 
-  const isAuthPage = AUTH_PATHS.includes(location.pathname);
-
   return (
     <div className={dark ? "app dark" : "app light"}>
-
-      {!isAuthPage && (
-        <Navbar
-          t={t}
-          lang={lang}
-          setLang={setLang}
-          dark={dark}
-          setDark={setDark}
-          menu={menu}
-          setMenu={setMenu}
-          langOpen={langOpen}
-          setLangOpen={setLangOpen}
-          navigate={goTo}
-        />
-      )}
+      <Navbar
+        t={t}
+        lang={lang}
+        setLang={setLang}
+        dark={dark}
+        setDark={setDark}
+        menu={menu}
+        setMenu={setMenu}
+        langOpen={langOpen}
+        setLangOpen={setLangOpen}
+        navigate={goTo}
+      />
 
       <Routes>
         <Route
@@ -187,14 +167,10 @@ export default function App() {
 
         <Route path="/about" element={<AboutPage t={t}/>} />
 
-        <Route path="/login" element={<LoginPage/>} />
-        <Route path="/register" element={<RegisterPage/>} />
-        <Route path="/complete-profile" element={<CompleteProfilePage/>} />
-
         <Route path="*" element={<Navigate to="/" replace/>} />
       </Routes>
 
-      {!isAuthPage && <Footer t={t}/>}
+      <Footer t={t}/>
 
       {coming && (
         <ComingModal
